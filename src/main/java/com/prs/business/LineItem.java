@@ -69,4 +69,8 @@ public class LineItem {
 		return "LineItem [id=" + id + ", request=" + request + ", product=" + product + ", quantity=" + quantity
 				+ "]";
 	}
+	
+	public double getTotal() {
+		return quantity * product.getPrice();
+	}
 }

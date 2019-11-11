@@ -45,6 +45,22 @@ public class UserController {
 	}
 	//URL = http://localhost:8080/users/5
 	
+	//BUSINESS LOGIC
+	@PostMapping("/login")
+	public JsonResponse loginUser(@RequestParam String username, @RequestParam String password) {
+		JsonResponse jr = null;
+		try {
+			//verify username and password
+			jr = JsonResponse.getInstance(userRepo.findByUsernameAndPassword(username, password));
+		}
+		catch (Exception e) {
+			jr = JsonResponse.getInstance(e.getMessage());
+			e.printStackTrace();
+		}
+	return jr;
+	}
+	//URL = http://localhost:8080/users/login
+	
 	//add - adds a new User
 	@PostMapping("/")
 	public JsonResponse addUser(@RequestBody User u) {

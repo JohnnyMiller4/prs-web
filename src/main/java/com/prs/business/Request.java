@@ -23,7 +23,7 @@ public class Request {
 	private LocalDate dateNeeded;
 	private String deliveryMode;
 	private String status;
-	private String total;
+	private double total;
 	private LocalDateTime submittedDate;
 	private String reasonForRejection;
 	
@@ -32,7 +32,7 @@ public class Request {
 	}
 
 	public Request(int id, User user, String description, String justification, LocalDate dateNeeded,
-			String deliveryMode, String status, String total, LocalDateTime submittedDate, String reasonForRejection) {
+			String deliveryMode, String status, Double total, LocalDateTime submittedDate, String reasonForRejection) {
 		super();
 		this.id = id;
 		this.user = user;
@@ -54,11 +54,11 @@ public class Request {
 		this.id = id;
 	}
 
-	public User getuser() {
+	public User getUser() {
 		return user;
 	}
 
-	public void setuser(User user) {
+	public void setUser(User user) {
 		this.user = user;
 	}
 
@@ -101,12 +101,12 @@ public class Request {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-
-	public String getTotal() {
+	
+	public double getTotal() {
 		return total;
 	}
 
-	public void setTotal(String total) {
+	public void setTotal(double total) {
 		this.total = total;
 	}
 

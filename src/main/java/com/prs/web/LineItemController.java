@@ -1,20 +1,26 @@
 package com.prs.web;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.web.bind.annotation.*;
 
 import com.prs.business.LineItem;
+import com.prs.business.Request;
 import com.prs.db.LineItemRepository;
+import com.prs.db.RequestRepository;
 import com.prs.web.JsonResponse;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/lineitems")
+@RequestMapping("/line-items")
 public class LineItemController {
 
 	@Autowired
 	private LineItemRepository lnRepo;
+	@Autowired
+	private RequestRepository reqRepo;
 	
 	//list - return all LineItems
 	@GetMapping("/") //exposes the following method to the web.
@@ -43,7 +49,7 @@ public class LineItemController {
 		}
 	return jr;
 	}
-	//URL = http://localhost:8080/lineitems/5
+	//URL = http://localhost:8080/line-items/5
 	
 	//add - adds a new LineItem
 	@PostMapping("/")
@@ -51,6 +57,8 @@ public class LineItemController {
 	JsonResponse jr = null;
 		try {
 			jr = JsonResponse.getInstance(lnRepo.save(ln));
+			//call recalculate
+			recalculateTotal(ln.getRequest());
 		}
 		catch (DataIntegrityViolationException dive) {
 			jr = JsonResponse.getInstance(dive.getRootCause().getMessage());
@@ -70,6 +78,8 @@ public class LineItemController {
 		try {
 			if (lnRepo.existsById(ln.getId())) {
 				jr = JsonResponse.getInstance(lnRepo.save(ln));
+				//call recalculate
+				recalculateTotal(ln.getRequest());
 			} else {
 				//record doesn't exist
 				jr = JsonResponse.getInstance("Error updating LineItem. ID: " + ln.getId() + " does not exist.");
@@ -85,11 +95,13 @@ public class LineItemController {
 		//delete - delete a LineItem
 		@DeleteMapping("/{id}")
 		public JsonResponse deleteLineItem(@PathVariable int id) {
-		JsonResponse jr = null;	
+		JsonResponse jr = null;
 			try {
 				if (lnRepo.existsById(id)) {
 					lnRepo.deleteById(id);
 					jr = JsonResponse.getInstance("Delete sucessful!");
+					//call recalculate
+					recalculateTotal(reqRepo.findById(id));
 				} else {
 				//record doesn't exist
 				jr = JsonResponse.getInstance("Error deleting LineItem. ID: " + id + " does not exist.");
@@ -102,6 +114,38 @@ public class LineItemController {
 			catch (Exception e) {
 				jr = JsonResponse.getInstance(e);
 				e.getStackTrace();
+			}
+		return jr;
+		}
+
+		
+		private void recalculateTotal(Request r) {
+			//get list of a LineItem
+			List<LineItem> lines = lnRepo.findAllByRequestId(r.getId());
+			//loop through list to sum a total
+			double total = 0.0;
+			for (LineItem line: lines) {
+				total += line.getTotal();
+			}
+			//save that total in the Request instance
+			r.setTotal(total);
+			try {
+				reqRepo.save(r);
+			} catch (Exception e) {
+				throw e;
+			}
+		}
+		
+		
+		@GetMapping("/lines-for-pr/{id}") //http://localhost:8080/line-items/lines-for-pr/1
+		public JsonResponse listRequest(@PathVariable int id) {
+			JsonResponse jr = null;
+			try {
+				jr = JsonResponse.getInstance(lnRepo.findByRequestId(id));
+			}
+			catch (Exception e) {
+				jr = JsonResponse.getInstance(e.getMessage());
+				e.printStackTrace();
 			}
 		return jr;
 		}
