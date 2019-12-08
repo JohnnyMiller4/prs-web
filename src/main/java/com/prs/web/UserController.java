@@ -47,11 +47,11 @@ public class UserController {
 	
 	//BUSINESS LOGIC
 	@PostMapping("/login")
-	public JsonResponse loginUser(@RequestParam String username, @RequestParam String password) {
+	public JsonResponse loginUser(@RequestBody User u) {
 		JsonResponse jr = null;
 		try {
 			//verify username and password
-			jr = JsonResponse.getInstance(userRepo.findByUsernameAndPassword(username, password));
+			jr = JsonResponse.getInstance(userRepo.findByUsernameAndPassword(u.getUsername(), u.getPassword()));
 		}
 		catch (Exception e) {
 			jr = JsonResponse.getInstance(e.getMessage());

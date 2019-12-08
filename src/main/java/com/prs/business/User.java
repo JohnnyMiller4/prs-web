@@ -16,15 +16,15 @@ public class User {
 	private String lastName;
 	private String phoneNumber;
 	private String email;
-	private int isReviewer;
-	private int isAdmin;
+	private boolean isReviewer;
+	private boolean isAdmin;
 	
 	public User() {
 		super();
 	}
 
 	public User(int id, String username, String password, String firstName, String lastName, String phoneNumber, String email,
-			int isReviewer, int isAdmin) {
+			boolean isReviewer, boolean isAdmin) {
 		super();
 		this.id = id;
 		this.username = username;
@@ -93,19 +93,19 @@ public class User {
 		this.email = email;
 	}
 
-	public int getIsReviewer() {
+	public boolean getIsReviewer() {
 		return isReviewer;
 	}
 
-	public void setIsReviewer(int isReviewer) {
+	public void setIsReviewer(boolean isReviewer) {
 		this.isReviewer = isReviewer;
 	}
 
-	public int getIsAdmin() {
+	public boolean getIsAdmin() {
 		return isAdmin;
 	}
 
-	public void setIsAdmin(int isAdmin) {
+	public void setIsAdmin(boolean isAdmin) {
 		this.isAdmin = isAdmin;
 	}
 

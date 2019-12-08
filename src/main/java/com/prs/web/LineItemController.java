@@ -98,10 +98,11 @@ public class LineItemController {
 		JsonResponse jr = null;
 			try {
 				if (lnRepo.existsById(id)) {
+					Request lineItem = lnRepo.findById(id).get().getRequest();
 					lnRepo.deleteById(id);
-					jr = JsonResponse.getInstance("Delete sucessful!");
+					jr = JsonResponse.getInstance("Delete successful!");
 					//call recalculate
-					recalculateTotal(reqRepo.findById(id));
+					recalculateTotal(lineItem);
 				} else {
 				//record doesn't exist
 				jr = JsonResponse.getInstance("Error deleting LineItem. ID: " + id + " does not exist.");

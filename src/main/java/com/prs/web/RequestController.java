@@ -57,6 +57,7 @@ public class RequestController {
 	public JsonResponse addRequest(@RequestBody Request r) {
 	JsonResponse jr = null;
 		try {
+			r.setStatus("New");
 			jr = JsonResponse.getInstance(reqRepo.save(r));
 		}
 		catch (DataIntegrityViolationException dive) {
@@ -137,7 +138,7 @@ public class RequestController {
 			return jr;
 			}
 		
-		@PutMapping("/purchase-requests/approve")
+		@PutMapping("/approve")
 		public JsonResponse approveRequest(@RequestBody Request r) {
 			JsonResponse jr = null;
 				try {
@@ -152,7 +153,7 @@ public class RequestController {
 			return jr;
 			}
 		
-		@PutMapping("/purchase-requests/reject")
+		@PutMapping("/reject")
 		public JsonResponse rejectRequest(@RequestBody Request r) {
 			JsonResponse jr = null;
 				try {

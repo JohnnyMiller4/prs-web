@@ -9,6 +9,6 @@ import com.prs.business.User;
 //T= type = Stuffy, ID = Integer
 public interface UserRepository extends CrudRepository<User, Integer> {
 	
-	List<User> findByUsernameAndPassword(String username, String password);
+	User findByUsernameAndPassword(String username, String password);
 
 }
