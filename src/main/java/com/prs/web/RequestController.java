@@ -143,6 +143,7 @@ public class RequestController {
 			JsonResponse jr = null;
 				try {
 					r.setStatus("Approved");
+					r.setReasonForRejection("");
 					r.setSubmittedDate(LocalDateTime.now());
 					jr = JsonResponse.getInstance(reqRepo.save(r));
 					}
